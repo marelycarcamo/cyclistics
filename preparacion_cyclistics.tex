@@ -1,0 +1,657 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Preparación de datos Cyclistics},
+  pdfauthor={marely},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Preparación de datos Cyclistics}
+\author{marely}
+\date{10-01-2025}
+
+\begin{document}
+\maketitle
+
+Introducción
+
+Este notebook contempla la fase de Preparación del Análisis de
+Cyclistics.
+
+\subsubsection{\texorpdfstring{\textbf{PASO 1.} Instalar y cargar el
+paquete
+Tidyverse.}{PASO 1. Instalar y cargar el paquete Tidyverse.}}\label{paso-1.-instalar-y-cargar-el-paquete-tidyverse.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{\textquotesingle{}tidyverse\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The following package(s) will be installed:
+## - tidyverse [2.0.0]
+## These packages will be installed into "~/Curso Google Analisis de Datos/Pista1. Practico1/Cyclistic/renv/library/windows/R-4.4/x86_64-w64-mingw32".
+## 
+## # Installing packages --------------------------------------------------------
+## - Installing tidyverse ...                      OK [linked from cache]
+## Successfully installed 1 package in 29 milliseconds.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+## v dplyr     1.1.4     v readr     2.1.5
+## v forcats   1.0.0     v stringr   1.5.1
+## v ggplot2   3.5.1     v tibble    3.2.1
+## v lubridate 1.9.4     v tidyr     1.3.1
+## v purrr     1.0.2     
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+## i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+\end{verbatim}
+
+\subsubsection{\texorpdfstring{\textbf{Paso 2.} Obtener las rutas a las
+subcarpetas}{Paso 2. Obtener las rutas a las subcarpetas}}\label{paso-2.-obtener-las-rutas-a-las-subcarpetas}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ruta\_datos }\OtherTok{\textless{}{-}} \FunctionTok{file.path}\NormalTok{(}\FunctionTok{getwd}\NormalTok{(),}\StringTok{"data"}\NormalTok{)}
+\NormalTok{ruta\_datos\_de\_origen }\OtherTok{\textless{}{-}} \FunctionTok{file.path}\NormalTok{(ruta\_datos, }\StringTok{"data{-}meses"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{\texorpdfstring{\textbf{Paso 3.} Cargar y mostrar la
+lista de archivos
+csv.}{Paso 3. Cargar y mostrar la lista de archivos csv.}}\label{paso-3.-cargar-y-mostrar-la-lista-de-archivos-csv.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{archivos\_csv }\OtherTok{\textless{}{-}} \FunctionTok{list.files}\NormalTok{(}\AttributeTok{path =}\NormalTok{ ruta\_datos\_de\_origen, }\AttributeTok{pattern =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.csv$"}\NormalTok{, }\AttributeTok{full.names =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{recursive =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(archivos\_csv)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "202401-divvy-tripdata.csv" "202402-divvy-tripdata.csv"
+##  [3] "202403-divvy-tripdata.csv" "202404-divvy-tripdata.csv"
+##  [5] "202405-divvy-tripdata.csv" "202406-divvy-tripdata.csv"
+##  [7] "202407-divvy-tripdata.csv" "202408-divvy-tripdata.csv"
+##  [9] "202409-divvy-tripdata.csv" "202410-divvy-tripdata.csv"
+## [11] "202411-divvy-tripdata.csv" "202412-divvy-tripdata.csv"
+\end{verbatim}
+
+\subsubsection{\texorpdfstring{\textbf{Paso 4.} Iterar sobre los
+archivos CSV para visualizar las
+columnas}{Paso 4. Iterar sobre los archivos CSV para visualizar las columnas}}\label{paso-4.-iterar-sobre-los-archivos-csv-para-visualizar-las-columnas}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{for}\NormalTok{ (archivo }\ControlFlowTok{in}\NormalTok{ archivos\_csv) \{ }
+  \FunctionTok{tryCatch}\NormalTok{(\{}
+\NormalTok{    datos }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\FunctionTok{file.path}\NormalTok{(ruta\_datos\_de\_origen, archivo)) }
+    \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{\textquotesingle{}NOMBRE ARCHIVO: \textquotesingle{}}\NormalTok{, archivo))}
+    \FunctionTok{print}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(datos))}
+    \FunctionTok{str}\NormalTok{(datos)}
+    \FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{  \}, }\AttributeTok{error =} \ControlFlowTok{function}\NormalTok{(e) \{}
+    \FunctionTok{message}\NormalTok{(}\StringTok{"Error leyendo archivo: "}\NormalTok{, archivo, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, e)}
+\NormalTok{  \})}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "NOMBRE ARCHIVO:  202401-divvy-tripdata.csv"
+##  [1] "ride_id"            "rideable_type"      "started_at"        
+##  [4] "ended_at"           "start_station_name" "start_station_id"  
+##  [7] "end_station_name"   "end_station_id"     "start_lat"         
+## [10] "start_lng"          "end_lat"            "end_lng"           
+## [13] "member_casual"     
+## 'data.frame':    144873 obs. of  13 variables:
+##  $ ride_id           : chr  "C1D650626C8C899A" "EECD38BDB25BFCB0" "F4A9CE78061F17F7" "0A0D9E15EE50B171" ...
+##  $ rideable_type     : chr  "electric_bike" "electric_bike" "electric_bike" "classic_bike" ...
+##  $ started_at        : chr  "2024-01-12 15:30:27" "2024-01-08 15:45:46" "2024-01-27 12:27:19" "2024-01-29 16:26:17" ...
+##  $ ended_at          : chr  "2024-01-12 15:37:59" "2024-01-08 15:52:59" "2024-01-27 12:35:19" "2024-01-29 16:56:06" ...
+##  $ start_station_name: chr  "Wells St & Elm St" "Wells St & Elm St" "Wells St & Elm St" "Wells St & Randolph St" ...
+##  $ start_station_id  : chr  "KA1504000135" "KA1504000135" "KA1504000135" "TA1305000030" ...
+##  $ end_station_name  : chr  "Kingsbury St & Kinzie St" "Kingsbury St & Kinzie St" "Kingsbury St & Kinzie St" "Larrabee St & Webster Ave" ...
+##  $ end_station_id    : chr  "KA1503000043" "KA1503000043" "KA1503000043" "13193" ...
+##  $ start_lat         : num  41.9 41.9 41.9 41.9 41.9 ...
+##  $ start_lng         : num  -87.6 -87.6 -87.6 -87.6 -87.7 ...
+##  $ end_lat           : num  41.9 41.9 41.9 41.9 41.9 ...
+##  $ end_lng           : num  -87.6 -87.6 -87.6 -87.6 -87.6 ...
+##  $ member_casual     : chr  "member" "member" "member" "member" ...
+## 
+## [1] "NOMBRE ARCHIVO:  202402-divvy-tripdata.csv"
+##  [1] "ride_id"            "rideable_type"      "started_at"        
+##  [4] "ended_at"           "start_station_name" "start_station_id"  
+##  [7] "end_station_name"   "end_station_id"     "start_lat"         
+## [10] "start_lng"          "end_lat"            "end_lng"           
+## [13] "member_casual"     
+## 'data.frame':    223164 obs. of  13 variables:
+##  $ ride_id           : chr  "FCB05EB1758F85E8" "7FB986AD5D3DE9D6" "40CA13E15B5B470D" "D47A1660919E8861" ...
+##  $ rideable_type     : chr  "classic_bike" "classic_bike" "electric_bike" "classic_bike" ...
+##  $ started_at        : chr  "2024-02-03 14:14:18" "2024-02-05 21:10:06" "2024-02-05 15:10:44" "2024-02-15 12:40:34" ...
+##  $ ended_at          : chr  "2024-02-03 14:21:00" "2024-02-05 21:15:44" "2024-02-05 15:12:32" "2024-02-15 12:44:24" ...
+##  $ start_station_name: chr  "Clark St & Newport St" "Michigan Ave & Washington St" "Leavitt St & Armitage Ave" "Southport Ave & Waveland Ave" ...
+##  $ start_station_id  : chr  "632" "13001" "TA1309000029" "13235" ...
+##  $ end_station_name  : chr  "Southport Ave & Waveland Ave" "Wabash Ave & Grand Ave" "Milwaukee Ave & Wabansia Ave" "Southport Ave & Belmont Ave" ...
+##  $ end_station_id    : chr  "13235" "TA1307000117" "13243" "13229" ...
+##  $ start_lat         : num  41.9 41.9 41.9 41.9 41.8 ...
+##  $ start_lng         : num  -87.7 -87.6 -87.7 -87.7 -87.6 ...
+##  $ end_lat           : num  41.9 41.9 41.9 41.9 41.8 ...
+##  $ end_lng           : num  -87.7 -87.6 -87.7 -87.7 -87.6 ...
+##  $ member_casual     : chr  "member" "member" "member" "member" ...
+## 
+## [1] "NOMBRE ARCHIVO:  202403-divvy-tripdata.csv"
+##  [1] "ride_id"            "rideable_type"      "started_at"        
+##  [4] "ended_at"           "start_station_name" "start_station_id"  
+##  [7] "end_station_name"   "end_station_id"     "start_lat"         
+## [10] "start_lng"          "end_lat"            "end_lng"           
+## [13] "member_casual"     
+## 'data.frame':    301687 obs. of  13 variables:
+##  $ ride_id           : chr  "64FBE3BAED5F29E6" "9991629435C5E20E" "E5C9FECD5B71BEBD" "4CEA3EC8906DAEA8" ...
+##  $ rideable_type     : chr  "electric_bike" "electric_bike" "electric_bike" "electric_bike" ...
+##  $ started_at        : chr  "2024-03-05 18:33:11" "2024-03-06 17:15:14" "2024-03-06 17:16:36" "2024-03-03 22:55:54" ...
+##  $ ended_at          : chr  "2024-03-05 18:51:48" "2024-03-06 17:16:04" "2024-03-06 17:19:28" "2024-03-03 22:58:08" ...
+##  $ start_station_name: chr  "" "" "" "" ...
+##  $ start_station_id  : chr  "" "" "" "" ...
+##  $ end_station_name  : chr  "" "" "" "" ...
+##  $ end_station_id    : chr  "" "" "" "" ...
+##  $ start_lat         : num  41.9 41.9 41.9 41.9 41.9 ...
+##  $ start_lng         : num  -87.7 -87.6 -87.6 -87.6 -87.7 ...
+##  $ end_lat           : num  42 41.9 41.9 41.9 41.9 ...
+##  $ end_lng           : num  -87.7 -87.6 -87.6 -87.6 -87.7 ...
+##  $ member_casual     : chr  "member" "member" "member" "member" ...
+## 
+## [1] "NOMBRE ARCHIVO:  202404-divvy-tripdata.csv"
+##  [1] "ride_id"            "rideable_type"      "started_at"        
+##  [4] "ended_at"           "start_station_name" "start_station_id"  
+##  [7] "end_station_name"   "end_station_id"     "start_lat"         
+## [10] "start_lng"          "end_lat"            "end_lng"           
+## [13] "member_casual"     
+## 'data.frame':    415025 obs. of  13 variables:
+##  $ ride_id           : chr  "743252713F32516B" "BE90D33D2240C614" "D47BBDDE7C40DD61" "6684E760BF9EA9B5" ...
+##  $ rideable_type     : chr  "classic_bike" "electric_bike" "classic_bike" "classic_bike" ...
+##  $ started_at        : chr  "2024-04-22 19:08:21" "2024-04-11 06:19:24" "2024-04-20 11:13:13" "2024-04-04 18:39:20" ...
+##  $ ended_at          : chr  "2024-04-22 19:12:56" "2024-04-11 06:22:21" "2024-04-20 11:29:31" "2024-04-04 18:43:06" ...
+##  $ start_station_name: chr  "Aberdeen St & Jackson Blvd" "Aberdeen St & Jackson Blvd" "Sheridan Rd & Montrose Ave" "Aberdeen St & Jackson Blvd" ...
+##  $ start_station_id  : chr  "13157" "13157" "TA1307000107" "13157" ...
+##  $ end_station_name  : chr  "Desplaines St & Jackson Blvd" "Desplaines St & Jackson Blvd" "Ashland Ave & Belle Plaine Ave" "Desplaines St & Jackson Blvd" ...
+##  $ end_station_id    : chr  "15539" "15539" "13249" "15539" ...
+##  $ start_lat         : num  41.9 41.9 42 41.9 42 ...
+##  $ start_lng         : num  -87.7 -87.7 -87.7 -87.7 -87.7 ...
+##  $ end_lat           : num  41.9 41.9 42 41.9 41.9 ...
+##  $ end_lng           : num  -87.6 -87.6 -87.7 -87.6 -87.6 ...
+##  $ member_casual     : chr  "member" "member" "member" "member" ...
+## 
+## [1] "NOMBRE ARCHIVO:  202405-divvy-tripdata.csv"
+##  [1] "ride_id"            "rideable_type"      "started_at"        
+##  [4] "ended_at"           "start_station_name" "start_station_id"  
+##  [7] "end_station_name"   "end_station_id"     "start_lat"         
+## [10] "start_lng"          "end_lat"            "end_lng"           
+## [13] "member_casual"     
+## 'data.frame':    609493 obs. of  13 variables:
+##  $ ride_id           : chr  "7D9F0CE9EC2A1297" "02EC47687411416F" "101370FB2D3402BE" "E97E396331ED6913" ...
+##  $ rideable_type     : chr  "classic_bike" "classic_bike" "classic_bike" "electric_bike" ...
+##  $ started_at        : chr  "2024-05-25 15:52:42" "2024-05-14 15:11:51" "2024-05-30 17:46:04" "2024-05-17 20:21:54" ...
+##  $ ended_at          : chr  "2024-05-25 16:11:50" "2024-05-14 15:22:00" "2024-05-30 18:09:16" "2024-05-17 20:40:32" ...
+##  $ start_station_name: chr  "Streeter Dr & Grand Ave" "Sheridan Rd & Greenleaf Ave" "Streeter Dr & Grand Ave" "Streeter Dr & Grand Ave" ...
+##  $ start_station_id  : chr  "13022" "KA1504000159" "13022" "13022" ...
+##  $ end_station_name  : chr  "Clark St & Elm St" "Sheridan Rd & Loyola Ave" "Wabash Ave & 9th St" "Sheffield Ave & Wellington Ave" ...
+##  $ end_station_id    : chr  "TA1307000039" "RP-009" "TA1309000010" "TA1307000052" ...
+##  $ start_lat         : num  41.9 42 41.9 41.9 41.9 ...
+##  $ start_lng         : num  -87.6 -87.7 -87.6 -87.6 -87.6 ...
+##  $ end_lat           : num  41.9 42 41.9 41.9 41.9 ...
+##  $ end_lng           : num  -87.6 -87.7 -87.6 -87.7 -87.6 ...
+##  $ member_casual     : chr  "casual" "casual" "member" "member" ...
+## 
+## [1] "NOMBRE ARCHIVO:  202406-divvy-tripdata.csv"
+##  [1] "ride_id"            "rideable_type"      "started_at"        
+##  [4] "ended_at"           "start_station_name" "start_station_id"  
+##  [7] "end_station_name"   "end_station_id"     "start_lat"         
+## [10] "start_lng"          "end_lat"            "end_lng"           
+## [13] "member_casual"     
+## 'data.frame':    710721 obs. of  13 variables:
+##  $ ride_id           : chr  "CDE6023BE6B11D2F" "462B48CD292B6A18" "9CFB6A858D23ABF7" "6365EFEB64231153" ...
+##  $ rideable_type     : chr  "electric_bike" "electric_bike" "electric_bike" "electric_bike" ...
+##  $ started_at        : chr  "2024-06-11 17:20:06.289" "2024-06-11 17:19:21.567" "2024-06-11 17:25:27.089" "2024-06-11 11:53:50.769" ...
+##  $ ended_at          : chr  "2024-06-11 17:21:39.464" "2024-06-11 17:19:36.377" "2024-06-11 17:30:13.035" "2024-06-11 12:08:13.382" ...
+##  $ start_station_name: chr  "" "" "" "" ...
+##  $ start_station_id  : chr  "" "" "" "" ...
+##  $ end_station_name  : chr  "" "" "" "" ...
+##  $ end_station_id    : chr  "" "" "" "" ...
+##  $ start_lat         : num  41.9 41.9 41.9 41.9 41.9 ...
+##  $ start_lng         : num  -87.7 -87.7 -87.7 -87.6 -87.6 ...
+##  $ end_lat           : num  41.9 41.9 41.9 41.9 41.9 ...
+##  $ end_lng           : num  -87.7 -87.7 -87.7 -87.6 -87.6 ...
+##  $ member_casual     : chr  "casual" "casual" "casual" "casual" ...
+## 
+## [1] "NOMBRE ARCHIVO:  202407-divvy-tripdata.csv"
+##  [1] "ride_id"            "rideable_type"      "started_at"        
+##  [4] "ended_at"           "start_station_name" "start_station_id"  
+##  [7] "end_station_name"   "end_station_id"     "start_lat"         
+## [10] "start_lng"          "end_lat"            "end_lng"           
+## [13] "member_casual"     
+## 'data.frame':    748962 obs. of  13 variables:
+##  $ ride_id           : chr  "2658E319B13141F9" "B2176315168A47CE" "C2A9D33DF7EBB422" "8BFEA406DF01D8AD" ...
+##  $ rideable_type     : chr  "electric_bike" "electric_bike" "electric_bike" "electric_bike" ...
+##  $ started_at        : chr  "2024-07-11 08:15:14.784" "2024-07-11 15:45:07.851" "2024-07-11 08:24:48.192" "2024-07-11 08:46:06.864" ...
+##  $ ended_at          : chr  "2024-07-11 08:17:56.335" "2024-07-11 16:06:04.243" "2024-07-11 08:28:05.237" "2024-07-11 09:14:11.664" ...
+##  $ start_station_name: chr  "" "" "" "" ...
+##  $ start_station_id  : chr  "" "" "" "" ...
+##  $ end_station_name  : chr  "" "" "" "" ...
+##  $ end_station_id    : chr  "" "" "" "" ...
+##  $ start_lat         : num  41.8 41.8 41.8 41.9 42 ...
+##  $ start_lng         : num  -87.6 -87.6 -87.6 -87.6 -87.6 ...
+##  $ end_lat           : num  41.8 41.8 41.8 41.9 41.9 ...
+##  $ end_lng           : num  -87.6 -87.6 -87.6 -87.7 -87.6 ...
+##  $ member_casual     : chr  "casual" "casual" "casual" "casual" ...
+## 
+## [1] "NOMBRE ARCHIVO:  202408-divvy-tripdata.csv"
+##  [1] "ride_id"            "rideable_type"      "started_at"        
+##  [4] "ended_at"           "start_station_name" "start_station_id"  
+##  [7] "end_station_name"   "end_station_id"     "start_lat"         
+## [10] "start_lng"          "end_lat"            "end_lng"           
+## [13] "member_casual"     
+## 'data.frame':    755639 obs. of  13 variables:
+##  $ ride_id           : chr  "BAA154388A869E64" "8752245932EFF67A" "44DDF9F57A9A161F" "44AAAF069B0C78C3" ...
+##  $ rideable_type     : chr  "classic_bike" "electric_bike" "classic_bike" "electric_bike" ...
+##  $ started_at        : chr  "2024-08-02 13:35:14.403" "2024-08-02 15:33:13.965" "2024-08-16 15:44:06.233" "2024-08-19 18:47:11.855" ...
+##  $ ended_at          : chr  "2024-08-02 13:48:24.426" "2024-08-02 15:55:23.865" "2024-08-16 15:57:52.109" "2024-08-19 18:56:33.269" ...
+##  $ start_station_name: chr  "State St & Randolph St" "Franklin St & Monroe St" "Franklin St & Monroe St" "Clark St & Elm St" ...
+##  $ start_station_id  : chr  "TA1305000029" "TA1309000007" "TA1309000007" "TA1307000039" ...
+##  $ end_station_name  : chr  "Wabash Ave & 9th St" "Damen Ave & Cortland St" "Clark St & Elm St" "McClurg Ct & Ohio St" ...
+##  $ end_station_id    : chr  "TA1309000010" "13133" "TA1307000039" "TA1306000029" ...
+##  $ start_lat         : num  41.9 41.9 41.9 41.9 42 ...
+##  $ start_lng         : num  -87.6 -87.6 -87.6 -87.6 -87.7 ...
+##  $ end_lat           : num  41.9 41.9 41.9 41.9 42 ...
+##  $ end_lng           : num  -87.6 -87.7 -87.6 -87.6 -87.7 ...
+##  $ member_casual     : chr  "member" "member" "member" "member" ...
+## 
+## [1] "NOMBRE ARCHIVO:  202409-divvy-tripdata.csv"
+##  [1] "ride_id"            "rideable_type"      "started_at"        
+##  [4] "ended_at"           "start_station_name" "start_station_id"  
+##  [7] "end_station_name"   "end_station_id"     "start_lat"         
+## [10] "start_lng"          "end_lat"            "end_lng"           
+## [13] "member_casual"     
+## 'data.frame':    821276 obs. of  13 variables:
+##  $ ride_id           : chr  "31D38723D5A8665A" "67CB39987F4E895B" "DA61204FD26EC681" "06F160D46AF235DD" ...
+##  $ rideable_type     : chr  "electric_bike" "electric_bike" "electric_bike" "electric_bike" ...
+##  $ started_at        : chr  "2024-09-26 15:30:58.150" "2024-09-26 15:31:32.529" "2024-09-26 15:00:33.012" "2024-09-26 18:19:06.491" ...
+##  $ ended_at          : chr  "2024-09-26 15:30:59.437" "2024-09-26 15:53:13.501" "2024-09-26 15:02:25.406" "2024-09-26 18:38:53.515" ...
+##  $ start_station_name: chr  "" "" "" "" ...
+##  $ start_station_id  : chr  "" "" "" "" ...
+##  $ end_station_name  : chr  "" "" "" "" ...
+##  $ end_station_id    : chr  "" "" "" "" ...
+##  $ start_lat         : num  41.9 41.9 41.9 41.9 41.9 ...
+##  $ start_lng         : num  -87.6 -87.6 -87.6 -87.6 -87.7 ...
+##  $ end_lat           : num  41.9 41.9 41.9 41.9 41.9 ...
+##  $ end_lng           : num  -87.6 -87.6 -87.6 -87.6 -87.6 ...
+##  $ member_casual     : chr  "member" "member" "member" "member" ...
+## 
+## [1] "NOMBRE ARCHIVO:  202410-divvy-tripdata.csv"
+##  [1] "ride_id"            "rideable_type"      "started_at"        
+##  [4] "ended_at"           "start_station_name" "start_station_id"  
+##  [7] "end_station_name"   "end_station_id"     "start_lat"         
+## [10] "start_lng"          "end_lat"            "end_lng"           
+## [13] "member_casual"     
+## 'data.frame':    616281 obs. of  13 variables:
+##  $ ride_id           : chr  "4422E707103AA4FF" "19DB722B44CBE82F" "20AE2509FD68C939" "D0F17580AB9515A9" ...
+##  $ rideable_type     : chr  "electric_bike" "electric_bike" "electric_bike" "electric_bike" ...
+##  $ started_at        : chr  "2024-10-14 03:26:04.083" "2024-10-13 19:33:38.926" "2024-10-13 23:40:48.522" "2024-10-14 02:13:41.602" ...
+##  $ ended_at          : chr  "2024-10-14 03:32:56.535" "2024-10-13 19:39:04.490" "2024-10-13 23:48:02.339" "2024-10-14 02:25:40.057" ...
+##  $ start_station_name: chr  "" "" "" "" ...
+##  $ start_station_id  : chr  "" "" "" "" ...
+##  $ end_station_name  : chr  "" "" "" "" ...
+##  $ end_station_id    : chr  "" "" "" "" ...
+##  $ start_lat         : num  42 42 42 42 42 ...
+##  $ start_lng         : num  -87.7 -87.7 -87.7 -87.7 -87.7 ...
+##  $ end_lat           : num  42 42 42 42 42 ...
+##  $ end_lng           : num  -87.7 -87.7 -87.7 -87.7 -87.7 ...
+##  $ member_casual     : chr  "member" "member" "member" "member" ...
+## 
+## [1] "NOMBRE ARCHIVO:  202411-divvy-tripdata.csv"
+##  [1] "ride_id"            "rideable_type"      "started_at"        
+##  [4] "ended_at"           "start_station_name" "start_station_id"  
+##  [7] "end_station_name"   "end_station_id"     "start_lat"         
+## [10] "start_lng"          "end_lat"            "end_lng"           
+## [13] "member_casual"     
+## 'data.frame':    335075 obs. of  13 variables:
+##  $ ride_id           : chr  "578DDD7CE1771FFA" "78B141C50102ABA6" "1E794CF36394E2D7" "E5DD2CAB58D73F98" ...
+##  $ rideable_type     : chr  "classic_bike" "classic_bike" "classic_bike" "classic_bike" ...
+##  $ started_at        : chr  "2024-11-07 19:21:58.206" "2024-11-22 14:49:00.431" "2024-11-08 09:24:00.238" "2024-11-24 17:51:14.144" ...
+##  $ ended_at          : chr  "2024-11-07 19:28:57.301" "2024-11-22 14:56:15.475" "2024-11-08 09:28:33.480" "2024-11-24 18:05:32.574" ...
+##  $ start_station_name: chr  "Walsh Park" "Walsh Park" "Walsh Park" "Clark St & Elm St" ...
+##  $ start_station_id  : chr  "18067" "18067" "18067" "TA1307000039" ...
+##  $ end_station_name  : chr  "Leavitt St & North Ave" "Leavitt St & Armitage Ave" "Damen Ave & Cortland St" "Clark St & Drummond Pl" ...
+##  $ end_station_id    : chr  "TA1308000005" "TA1309000029" "13133" "TA1307000142" ...
+##  $ start_lat         : num  41.9 41.9 41.9 41.9 41.9 ...
+##  $ start_lng         : num  -87.7 -87.7 -87.7 -87.6 -87.6 ...
+##  $ end_lat           : num  41.9 41.9 41.9 41.9 41.9 ...
+##  $ end_lng           : num  -87.7 -87.7 -87.7 -87.6 -87.6 ...
+##  $ member_casual     : chr  "member" "member" "member" "member" ...
+## 
+## [1] "NOMBRE ARCHIVO:  202412-divvy-tripdata.csv"
+##  [1] "ride_id"            "rideable_type"      "started_at"        
+##  [4] "ended_at"           "start_station_name" "start_station_id"  
+##  [7] "end_station_name"   "end_station_id"     "start_lat"         
+## [10] "start_lng"          "end_lat"            "end_lng"           
+## [13] "member_casual"     
+## 'data.frame':    178372 obs. of  13 variables:
+##  $ ride_id           : chr  "6C960DEB4F78854E" "C0913EEB2834E7A2" "848A37DD4723078A" "3FA09C762ECB48BD" ...
+##  $ rideable_type     : chr  "electric_bike" "classic_bike" "classic_bike" "electric_bike" ...
+##  $ started_at        : chr  "2024-12-31 01:38:35.018" "2024-12-21 18:41:26.478" "2024-12-21 11:41:01.664" "2024-12-26 13:07:27.526" ...
+##  $ ended_at          : chr  "2024-12-31 01:48:45.775" "2024-12-21 18:47:33.871" "2024-12-21 11:52:45.094" "2024-12-26 13:10:54.130" ...
+##  $ start_station_name: chr  "Halsted St & Roscoe St" "Clark St & Wellington Ave" "Sheridan Rd & Montrose Ave" "Aberdeen St & Jackson Blvd" ...
+##  $ start_station_id  : chr  "TA1309000025" "TA1307000136" "TA1307000107" "13157" ...
+##  $ end_station_name  : chr  "Clark St & Winnemac Ave" "Halsted St & Roscoe St" "Broadway & Barry Ave" "Green St & Randolph St*" ...
+##  $ end_station_id    : chr  "TA1309000035" "TA1309000025" "13137" "chargingstx3" ...
+##  $ start_lat         : num  41.9 41.9 42 41.9 41.9 ...
+##  $ start_lng         : num  -87.6 -87.6 -87.7 -87.7 -87.7 ...
+##  $ end_lat           : num  42 41.9 41.9 41.9 41.9 ...
+##  $ end_lng           : num  -87.7 -87.6 -87.6 -87.6 -87.7 ...
+##  $ member_casual     : chr  "member" "member" "member" "member" ...
+\end{verbatim}
+
+\subsubsection{\texorpdfstring{\textbf{Paso 5.} Leer y combinar todos
+los archivos csv en un solo
+dataframe.}{Paso 5. Leer y combinar todos los archivos csv en un solo dataframe.}}\label{paso-5.-leer-y-combinar-todos-los-archivos-csv-en-un-solo-dataframe.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dataframe\_combinado }\OtherTok{\textless{}{-}}\NormalTok{ archivos\_csv }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{map\_df}\NormalTok{(}\SpecialCharTok{\textasciitilde{}} \FunctionTok{read\_csv}\NormalTok{(}\FunctionTok{file.path}\NormalTok{(ruta\_datos\_de\_origen, .))) }\CommentTok{\# Combina automáticamente todos los datos}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 144873 Columns: 13
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_...
+## dbl  (4): start_lat, start_lng, end_lat, end_lng
+## dttm (2): started_at, ended_at
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 223164 Columns: 13
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_...
+## dbl  (4): start_lat, start_lng, end_lat, end_lng
+## dttm (2): started_at, ended_at
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 301687 Columns: 13
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_...
+## dbl  (4): start_lat, start_lng, end_lat, end_lng
+## dttm (2): started_at, ended_at
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 415025 Columns: 13
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_...
+## dbl  (4): start_lat, start_lng, end_lat, end_lng
+## dttm (2): started_at, ended_at
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 609493 Columns: 13
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_...
+## dbl  (4): start_lat, start_lng, end_lat, end_lng
+## dttm (2): started_at, ended_at
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 710721 Columns: 13
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_...
+## dbl  (4): start_lat, start_lng, end_lat, end_lng
+## dttm (2): started_at, ended_at
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 748962 Columns: 13
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_...
+## dbl  (4): start_lat, start_lng, end_lat, end_lng
+## dttm (2): started_at, ended_at
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 755639 Columns: 13
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_...
+## dbl  (4): start_lat, start_lng, end_lat, end_lng
+## dttm (2): started_at, ended_at
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 821276 Columns: 13
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_...
+## dbl  (4): start_lat, start_lng, end_lat, end_lng
+## dttm (2): started_at, ended_at
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 616281 Columns: 13
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_...
+## dbl  (4): start_lat, start_lng, end_lat, end_lng
+## dttm (2): started_at, ended_at
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 335075 Columns: 13
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_...
+## dbl  (4): start_lat, start_lng, end_lat, end_lng
+## dttm (2): started_at, ended_at
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 178372 Columns: 13
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_...
+## dbl  (4): start_lat, start_lng, end_lat, end_lng
+## dttm (2): started_at, ended_at
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{str}\NormalTok{(dataframe\_combinado)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## spc_tbl_ [5,860,568 x 13] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+##  $ ride_id           : chr [1:5860568] "C1D650626C8C899A" "EECD38BDB25BFCB0" "F4A9CE78061F17F7" "0A0D9E15EE50B171" ...
+##  $ rideable_type     : chr [1:5860568] "electric_bike" "electric_bike" "electric_bike" "classic_bike" ...
+##  $ started_at        : POSIXct[1:5860568], format: "2024-01-12 15:30:27" "2024-01-08 15:45:46" ...
+##  $ ended_at          : POSIXct[1:5860568], format: "2024-01-12 15:37:59" "2024-01-08 15:52:59" ...
+##  $ start_station_name: chr [1:5860568] "Wells St & Elm St" "Wells St & Elm St" "Wells St & Elm St" "Wells St & Randolph St" ...
+##  $ start_station_id  : chr [1:5860568] "KA1504000135" "KA1504000135" "KA1504000135" "TA1305000030" ...
+##  $ end_station_name  : chr [1:5860568] "Kingsbury St & Kinzie St" "Kingsbury St & Kinzie St" "Kingsbury St & Kinzie St" "Larrabee St & Webster Ave" ...
+##  $ end_station_id    : chr [1:5860568] "KA1503000043" "KA1503000043" "KA1503000043" "13193" ...
+##  $ start_lat         : num [1:5860568] 41.9 41.9 41.9 41.9 41.9 ...
+##  $ start_lng         : num [1:5860568] -87.6 -87.6 -87.6 -87.6 -87.7 ...
+##  $ end_lat           : num [1:5860568] 41.9 41.9 41.9 41.9 41.9 ...
+##  $ end_lng           : num [1:5860568] -87.6 -87.6 -87.6 -87.6 -87.6 ...
+##  $ member_casual     : chr [1:5860568] "member" "member" "member" "member" ...
+##  - attr(*, "spec")=
+##   .. cols(
+##   ..   ride_id = col_character(),
+##   ..   rideable_type = col_character(),
+##   ..   started_at = col_datetime(format = ""),
+##   ..   ended_at = col_datetime(format = ""),
+##   ..   start_station_name = col_character(),
+##   ..   start_station_id = col_character(),
+##   ..   end_station_name = col_character(),
+##   ..   end_station_id = col_character(),
+##   ..   start_lat = col_double(),
+##   ..   start_lng = col_double(),
+##   ..   end_lat = col_double(),
+##   ..   end_lng = col_double(),
+##   ..   member_casual = col_character()
+##   .. )
+##  - attr(*, "problems")=<externalptr>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(dataframe\_combinado)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 13
+##   ride_id          rideable_type started_at          ended_at           
+##   <chr>            <chr>         <dttm>              <dttm>             
+## 1 C1D650626C8C899A electric_bike 2024-01-12 15:30:27 2024-01-12 15:37:59
+## 2 EECD38BDB25BFCB0 electric_bike 2024-01-08 15:45:46 2024-01-08 15:52:59
+## 3 F4A9CE78061F17F7 electric_bike 2024-01-27 12:27:19 2024-01-27 12:35:19
+## 4 0A0D9E15EE50B171 classic_bike  2024-01-29 16:26:17 2024-01-29 16:56:06
+## 5 33FFC9805E3EFF9A classic_bike  2024-01-31 05:43:23 2024-01-31 06:09:35
+## 6 C96080812CD285C5 classic_bike  2024-01-07 11:21:24 2024-01-07 11:30:03
+## # i 9 more variables: start_station_name <chr>, start_station_id <chr>,
+## #   end_station_name <chr>, end_station_id <chr>, start_lat <dbl>,
+## #   start_lng <dbl>, end_lat <dbl>, end_lng <dbl>, member_casual <chr>
+\end{verbatim}
+
+\subsubsection{\texorpdfstring{\textbf{Paso 6.} Exportar el dataframe a
+csv.}{Paso 6. Exportar el dataframe a csv.}}\label{paso-6.-exportar-el-dataframe-a-csv.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{write.csv}\NormalTok{(dataframe\_combinado, }\FunctionTok{file.path}\NormalTok{(ruta\_datos, }\StringTok{"2024{-}tripdata.csv"}\NormalTok{), }\AttributeTok{row.names =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}
