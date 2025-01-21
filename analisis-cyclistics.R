@@ -4,6 +4,8 @@
 # CArgar librerías necesarias
 
 library(ggplot2)
+
+install.packages('scales')
 library(scales)
 
 
@@ -136,7 +138,7 @@ ggplot(data_resumen_semana, aes(x = dia_semana, y = cantidad_recorridos, fill = 
   scale_fill_manual(values = colores_clientes) + # Aplicar la paleta de colores específica
   scale_y_continuous(labels = comma) + # Cambia el formato del eje Y
   labs(
-    title = "Número de Recorridos por Tipo de Cliente y Día de la Semana",
+    title = "Número de Recorridos Diarios por Tipo de Cliente",
     subtitle = "Cyclistics, Chicago 2024",
     x = "Día de la Semana", y = "Número de Recorridos"
   ) +

@@ -162,15 +162,6 @@ datos_conflictos_inicial <- tripdata_new %>%
 print(datos_conflictos_inicial)
 
 
-# Agrupar por id_estacion_final y estacion_final  contar las ocurrencias 
-datos_conflictos_final <- tripdata_new %>%
-  group_by(id_estacion_final, estacion_final) %>%
-  summarize(conteo = n(), .groups = "drop") %>%
-  ungroup() %>% group_by(id_estacion_final) %>%
-  filter(n() > 1)
-print(datos_conflictos_final)
-
-
 
 # Eliminar columnas en conflictos para garantizar la consistencia de datos
 tripdata_new <- tripdata_new %>% 

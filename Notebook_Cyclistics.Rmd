@@ -1,0 +1,471 @@
+---
+title: "Cyclistics"
+author: "marely"
+date: "18-01-2024"
+output:
+  html_document: 
+    theme: spacelab
+  html_notebook: default
+editor_options:
+  chunk_output_type: inline
+---
+
+# Preparación de Datos
+
+\
+**Paso 1.** Instalación y carga del paquete `Tidyverse`
+
+```{r}
+if (!requireNamespace("tidyverse", quietly = TRUE)) 
+  install.packages("tidyverse") 
+library(tidyverse) 
+```
+
+\
+**Paso 2.** Función para construir rutas.
+
+```{r}
+construir_ruta <- function(...){
+  return(file.path(getwd(), ...))
+} 
+```
+
+\
+**Paso 3.** Obtener las rutas de datos y datos de origen (data-meses)
+
+```{r}
+ruta_datos <- construir_ruta("data") 
+ruta_datos_de_origen <- construir_ruta("data", "data-meses")
+```
+
+\
+**Paso 4.** Cargar y mostrar la lista de archivos csv correspondiente a los datos mensuales del proyecto.
+
+```{r}
+archivos_csv <- list.files(path = ruta_datos_de_origen, pattern = "\\.csv$", full.names = FALSE, recursive = TRUE)
+print(archivos_csv)
+```
+
+\
+**Paso 5.** Iterar sobre los archivos csv para visualizar las columnas.
+
+```{r}
+for (archivo in archivos_csv) { 
+  tryCatch({
+    datos <- read.csv(file.path(ruta_datos_de_origen, archivo)) 
+    print(paste('NOMBRE ARCHIVO: ', archivo))
+    print(colnames(datos))
+    str(datos)
+    cat("\n")
+  }, error = function(e) {
+    message("Error leyendo archivo: ", archivo, "\n", e)
+  })
+}
+```
+
+\
+**Paso 6.** Leer y combinar todos los archivos en un único dataframe.
+
+```{r}
+dataframe_combinado <- archivos_csv %>%
+  map_df(~ read_csv(file.path(ruta_datos_de_origen, .))) # Combina automáticamente todos los datos
+str(dataframe_combinado)
+head(dataframe_combinado)
+```
+
+\
+**Paso 7.** Exportar el dataframe a csv.
+
+```{r}
+write.csv(dataframe_combinado, file.path(ruta_datos, "2024-tripdata.csv"), row.names = FALSE)
+```
+
+\
+
+------------------------------------------------------------------------
+
+\
+
+# Limpieza de Datos {#sec-limpieza-de-datos}
+
+\
+**Paso 1.** Instalar y cargar paquete `Lubridate`
+
+```{r}
+install.packages('lubridate')
+library(lubridate)
+```
+
+\
+**Paso 2.** Importar nuevas data y visualizar resumen de datos
+
+```{r}
+data <- read_csv(file.path(ruta_datos, '2024-tripdata.csv'))
+head(data)
+summary(data)
+str(data)
+glimpse(data)
+```
+
+\
+**Paso 3.** Eliminar columnas innecesarias
+
+```{r}
+data <- data %>% 
+  select(-c('start_lat', 'start_lng', 'end_lat', 'end_lng'))
+glimpse(data)
+```
+
+\
+**Paso 4.** Renombrar las columnas
+
+```{r}
+tripdata_rename <- rename(data, 
+                          id_recorrido = ride_id,
+                          tipo_bicicleta = rideable_type,
+                          inicio_recorrido = started_at,
+                          final_recorrido = ended_at,
+                          estacion_inicial = start_station_name,
+                          estacion_final = end_station_name,
+                          id_estacion_inicial = start_station_id,
+                          id_estacion_final = end_station_id,
+                          tipo_cliente = member_casual)
+glimpse(tripdata_rename)
+
+```
+
+\
+**Paso 5.** Eliminar registros duplicados
+
+```{r}
+tripdata_rename <- tripdata_rename %>%  distinct() 
+```
+
+\
+**Paso 6.** Identificar tipo de usuarios y tipos de bicicletas
+
+```{r}
+tripdata_rename %>% 
+  group_by(tipo_bicicleta,tipo_cliente) %>%
+  summarize(n())
+```
+
+\
+**Paso 7.** Mutar la dataframe:
+
+-   Crear nuevas columnas: mes y dia_semana.
+
+-   Renombrar los timpos de clientes y tipos de bicicletas.
+
+-   Visualizar resultado.
+
+```{r}
+tripdata_new <- tripdata_rename %>% 
+  mutate(tiempo_recorrido = as.numeric(difftime(final_recorrido, inicio_recorrido, units = 'mins')),
+         mes = format(as.Date(inicio_recorrido), "%B"),
+         dia_semana = weekdays(as.Date(inicio_recorrido)),
+         tipo_cliente = recode(tipo_cliente,
+                               "member" = 'suscriptor',
+                               "casual" = 'cliente'),
+         tipo_bicicleta = recode(tipo_bicicleta,
+                                 'classic_bike' = 'bicicleta clasica',
+                                 'electric_bike' = 'bicicleta electrica',
+                                 'electric_scooter' = 'scooter electrico'))
+glimpse(tripdata_new)
+head(tripdata_new)
+```
+
+\
+**Paso 8.** Contar valores inferiores a cero en la columna `tiempo_recorrido`
+
+```{r}
+valores_negativos <- sum(tripdata_new$tiempo_recorrido < 0, na.rm = TRUE)
+print(paste("Valores menores a 0 en tiempo_recorrido:", valores_negativos))
+```
+
+\
+**Paso 9.** Fitrar recorrido con valores superiores a cero.
+
+```{r}
+tripdata_new <- tripdata_new %>% 
+  filter(tiempo_recorrido > 0)
+```
+
+###  {#sec-valores-nulos}
+
+\
+**Paso 10.** Tratar valores nulos
+
+1.  Mostrar valores nulos, cantidad y porcentaje por columnas.
+
+    ```{r}
+    colSums(is.na(tripdata_new))
+    porcentaje_nulos <- sapply(tripdata_new[, c("id_estacion_inicial", "estacion_inicial", "id_estacion_final", "estacion_final")], function(x) mean(is.na(x)) * 100)
+    print(porcentaje_nulos)
+    ```
+
+2.  Reemplazar valores nulos.
+
+    ```{r}
+    tripdata_new <- tripdata_new %>%
+      replace_na(list(
+        estacion_inicial = "Desconocido",
+        id_estacion_inicial = "Desconocido",
+        estacion_final = "Desconocido",
+        id_estacion_final = "Desconocido"
+      ))
+    ```
+
+\
+**Paso 11.** Formatear columnas tipo caracter
+
+```{r}
+tripdata_new <- tripdata_new %>%
+  mutate(
+    across(where(is.character), ~ str_trim(.)),       # Eliminar espacios en blanco
+    estacion_inicial = str_to_title(estacion_inicial),  # Inicial mayúscula
+    estacion_final = str_to_title(estacion_final)     # Igual para final
+  )
+head(tripdata_new)
+```
+
+\
+**Paso 12.** Manejo de columnas en conflicto
+
+1.  Agrupar las columnas con datos en conflicto por incosistencia de datos y contar las ocurrencias.
+
+    ```{r}
+    datos_conflictos_inicial <- tripdata_new %>%
+      group_by(id_estacion_inicial, estacion_inicial) %>%
+      summarize(conteo = n(), .groups = "drop") %>%
+      ungroup() %>% group_by(id_estacion_inicial) %>%
+      filter(n() > 1) 
+    print(datos_conflictos_inicial)
+    ```
+
+2.  Eliminar columnas para evitar inconsistencia de datos y sesgo.
+
+```{r}
+tripdata_new <- tripdata_new %>% 
+  select(-c('id_estacion_inicial','estacion_inicial','id_estacion_final','estacion_final'))
+glimpse(tripdata_new)
+```
+
+\
+**Paso 13.** Exportar dataframe limpio a csv.
+
+```{r}
+write.csv(tripdata_new, file.path(ruta_datos, "2024-tripdata-clean.csv"), row.names = FALSE)
+```
+
+\
+
+------------------------------------------------------------------------
+
+# Análisis y Visualización de Datos
+
+\
+**Paso 1.** Cargar los paquetes necesarios.
+
+```{r}
+install.packages('scales')
+library(scales)
+library(ggplot2)
+```
+
+\
+**Paso 2.** Importar datos limpios.
+
+```{r}
+data_clean <- read_csv(file.path(ruta_datos, '2024-tripdata-clean.csv'))
+glimpse(data_clean)
+head(data_clean)
+```
+
+\
+**Paso 3.** Análisis descriptivos de tiempo de recorrido
+
+```{r}
+summary(data_clean$tiempo_recorrido)
+```
+
+\
+**Paso 4.** Análisis comparativo entre clientes y suscriptores
+
+```{r}
+aggregate(data_clean$tiempo_recorrido ~ data_clean$tipo_cliente, FUN = mean)
+aggregate(data_clean$tiempo_recorrido ~ data_clean$tipo_cliente, FUN = median)
+aggregate(data_clean$tiempo_recorrido ~ data_clean$tipo_cliente, FUN = max)
+aggregate(data_clean$tiempo_recorrido ~ data_clean$tipo_cliente, FUN = min)
+```
+
+\
+**Paso 5.** Definir días de la semana y meses del año
+
+```{r}
+data_clean$mes <- ordered(data_clean$mes, levels=c('enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'))
+data_clean$dia_semana <- ordered(data_clean$dia_semana, levels=c("lunes", "martes", "miércoles", "jueves", "viernes", "sábado","domingo"))
+```
+
+\
+**Paso 6.** Vectores ordenados
+
+1.  Días de la semana ordenados de lunes a domingo
+
+    ```{r}
+    dias_semana_ordenados <- c("lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo")
+    ```
+
+2.  Meses del año, ordenados de enero a diciembre.
+
+    ```{r}
+    meses_ordenados <- c("enero", "febrero", "marzo", "abril", "mayo", "junio", 
+                         "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre")
+    ```
+
+\
+\
+**Paso 7.** Definir una paleta de colores específica para cada tipo de cliente
+
+```{r}
+colores_clientes <- c("suscriptor" = "#1b9e77", "cliente" = "#5F02D9")
+```
+
+\
+**Paso 8.** Visualizar tiempo promedio diario entre clientes y suscriptores
+
+```{r}
+aggregate(data_clean$tiempo_recorrido ~ data_clean$tipo_cliente + data_clean$dia_semana, FUN = mean)
+```
+
+\
+**Paso 9.** Visualizaciones Periodo Mensual
+
+1.  **Resumen:** cantidad de recorridos y tiempo promedio de recorridos agrupados por tipo de cliente y mes
+
+```{{r}}
+# Verificar los valores únicos en la columna 'tipo_cliente'
+unique(data_clean$tipo_cliente)
+# Resumir datos por mes
+data_resumen_mes <- data_clean %>%
+  mutate(mes = factor(mes, levels = meses_ordenados)) %>%
+  group_by(tipo_cliente, mes) %>%
+  summarise(
+    cantidad_recorridos = n(),
+    tiempo_promedio = mean(tiempo_recorrido, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+2.  **Visualización:** Tendencia de recorridos mensuales por tipo de cliente
+
+    ```{r}
+    # Visualización: Gráfico de área por tendencias mensuales de recorridos
+      ggplot(data_resumen_mes,aes(x = mes, y = cantidad_recorridos, group = tipo_cliente, fill = tipo_cliente)) +
+      geom_area(position = "stack") +
+      scale_fill_manual(values = colores_clientes) + # Aplicar la paleta de colores específica
+      scale_y_continuous(labels = comma) + # Cambia el formato del eje Y
+      labs(title = "Tendencias Mensuales de Recorridos por Tipo de Cliente",
+           subtitle = "Cyclistics, Chicago 2024", # Subtítulo
+           x = "Meses",
+           y = "Cantidad de Recorridos") +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(hjust = 0.5),  # Alinea el título a la derecha
+        plot.subtitle = element_text(hjust = 0.5), # Alinea el subtítulo a la derecha
+        axis.text.x = element_text(margin = margin(t = 30, b=5)), # Añadir margen superior a las etiquetas del eje X 
+        axis.text.y = element_text(margin = margin(r = 30, l=5)), # Añadir margen derecho a las etiquetas del eje Y
+        plot.margin = margin(t = 20, b = 20, l = 20, r = 20) # Añadir margen superior para subir el título y subtítulo
+      ) +
+      annotate("text", x = Inf, y = -Inf, label = "Fuente: Cyclistic", hjust = 1.1, vjust = -0.5, size = 3)
+
+    ```
+
+3.  **Visualización:** Tiempo medio recorrido mensual por tipo de cliente
+
+```{r}
+  ggplot(data_resumen_mes,aes(x = mes, y = tiempo_promedio, group = tipo_cliente, fill = tipo_cliente)) +
+    geom_area(position = "stack") +
+    scale_fill_manual(values = colores_clientes) + # Aplicar la paleta de colores específica
+    scale_y_continuous(labels = comma) + # Cambia el formato del eje Y
+    labs(title = "Tiempo Promedio Mensual Recorrido por Tipo de Cliente",
+         subtitle = "Cyclistics, Chicago 2024", # Subtítulo
+         x = "Meses",
+         y = "Tiempo promedio (min)") +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(hjust = 0.5),  # Alinea el título a la derecha
+      plot.subtitle = element_text(hjust = 0.5), # Alinea el subtítulo a la derecha
+      axis.text.x = element_text(margin = margin(t = 30, b=5)), # Añadir margen superior a las etiquetas del eje X 
+      axis.text.y = element_text(margin = margin(r = 30, l=5)), # Añadir margen derecho a las etiquetas del eje Y
+      plot.margin = margin(t = 20, b = 20, l = 20, r = 20) # Añadir margen superior para subir el título y subtítulo
+    ) +
+    annotate("text", x = Inf, y = -Inf, label = "Fuente: Cyclistic", hjust = 1.1, vjust = -0.5, size = 3)
+```
+
+\
+\
+Paso 10. Visualizaciones Periodo Diario
+
+1.  **Resumen:** cantidad de recorridos y tiempo medio agrupados por tipo de cliente y dia de la semana.
+
+    ```{r}
+    # Resumir datos para dias de la semana
+    data_resumen_semana <- data_clean %>%
+      mutate(dia_semana = factor(dia_semana, levels = dias_semana_ordenados),
+             hora_inicio = hour(inicio_recorrido),
+             hora_final = hour(final_recorrido)) %>%
+      group_by(tipo_cliente, dia_semana) %>%
+      summarise(
+        cantidad_recorridos = n(),
+        tiempo_promedio = mean(tiempo_recorrido, na.rm = TRUE),
+        .groups = "drop"
+      ) 
+    ```
+
+2.  **Visualización:** "Total de Recorridos Diarios por Tipo de Cliente"
+
+    ```{r}
+    # Visualización: Número de recorridos
+    ggplot(data_resumen_semana, aes(x = dia_semana, y = cantidad_recorridos, fill = tipo_cliente)) +
+      geom_col(position = "dodge") +
+      scale_fill_manual(values = colores_clientes) + # Aplicar la paleta de colores específica
+      scale_y_continuous(labels = comma) + # Cambia el formato del eje Y
+      labs(
+        title = "Total de Recorridos Diarios por Tipo de Cliente",
+        subtitle = "Cyclistics, Chicago 2024",
+        x = "Día de la Semana", y = "Número de Recorridos"
+      ) +
+      theme_minimal() +
+      theme( 
+        plot.title = element_text(hjust = 0.5), # Centra el título 
+        plot.subtitle = element_text(hjust = 0.5), # Centra el subtítulo
+        axis.text.x = element_text(margin = margin(t = 30, b=5)), # Añadir margen superior a las etiquetas del eje X 
+        axis.text.y = element_text(margin = margin(r = 30, l=5)), # Añadir margen derecho a las etiquetas del eje Y
+        plot.margin = margin(t = 20, b = 20, l = 20, r = 20) # Añadir margen superior para subir el título y subtítulo
+        ) +
+      annotate("text", x = Inf, y = -Inf, label = "Fuente: Cyclistic", hjust = 1.1, vjust = -0.5, size = 3)
+    ```
+
+3.  **Visualización:** " Tiempo Medio Diario por Tipo de Cliente"
+
+    ```{r}
+    # Visualización: Tiempo promedio  de recorridos por tipo de cliente en dias de la semana
+      ggplot(data_resumen_semana, aes(x = dia_semana, y = tiempo_promedio, fill = tipo_cliente)) +
+      geom_col(position = "dodge") +
+      scale_fill_manual(values = colores_clientes) + # Aplicar la paleta de colores específica
+      scale_y_continuous(labels = comma) + # Cambia el formato del eje Y
+      labs(
+        title = "Tiempo Promedio de Recorridos Durante la Semana por Tipo de Cliente",
+        subtitle = "Cyclistics, Chicago 2024",
+        x = "Día de la Semana", y = "Tiempo Promedio (min)"
+      ) +
+      theme_minimal() +
+      theme( 
+        plot.title = element_text(hjust = 0.5), # Centra el título 
+        plot.subtitle = element_text(hjust = 0.5), # Centra el subtítulo
+        axis.text.x = element_text(margin = margin(t = 30, b=5)), # Añadir margen superior a las etiquetas del eje X 
+        axis.text.y = element_text(margin = margin(r = 30, l=5)), # Añadir margen derecho a las etiquetas del eje Y
+      ) +
+      annotate("text", x = Inf, y = -Inf, label = "Fuente: Cyclistic", hjust = 1.1, vjust = -0.5, size = 3)
+    ```
