@@ -1,11 +1,13 @@
 ---
-title: "Cyclistics"
+title: "Cyclistics, Chicago 2024"
 author: "marely"
 date: "18-01-2024"
 output:
-  html_document: 
-    theme: spacelab
   html_notebook: default
+  html_document:
+    theme: spacelab
+  pdf_document: default
+  word_document: default
 editor_options:
   chunk_output_type: inline
 ---
@@ -381,6 +383,7 @@ ggplot(data_resumen_mes,aes(x = mes, y = cantidad_recorridos, group = tipo_clien
 
 ```
 
+![](images/tendencia_total_numero_recorridos_mes_tipo_cliente.png)\
 
 3.  **Visualización:** Tiempo medio recorrido mensual por tipo de cliente
 
@@ -404,7 +407,7 @@ ggplot(data_resumen_mes,aes(x = mes, y = tiempo_promedio, group = tipo_cliente, 
   annotate("text", x = Inf, y = -Inf, label = "Fuente: Cyclistic", hjust = 1.1, vjust = -0.5, size = 3)
 ```
 
-\
+![](images/Tiempo_promedio_recorrido_mes_tipo_cliente.png)\
 \
 Paso 10. Visualizaciones Periodo Diario
 
@@ -423,7 +426,6 @@ Paso 10. Visualizaciones Periodo Diario
       .groups = "drop"
     ) 
 ```
-
 
 2.  **Visualización:** "Total de Recorridos Diarios por Tipo de Cliente"
 
@@ -449,6 +451,7 @@ ggplot(data_resumen_semana, aes(x = dia_semana, y = cantidad_recorridos, fill = 
   annotate("text", x = Inf, y = -Inf, label = "Fuente: Cyclistic", hjust = 1.1, vjust = -0.5, size = 3)
 ```
 
+![](images/Numero_recorridos_diarios_tipo_clientes.png)\
 
 3.  **Visualización:** " Tiempo Medio Diario por Tipo de Cliente"
 
@@ -472,3 +475,5 @@ ggplot(data_resumen_semana, aes(x = dia_semana, y = tiempo_promedio, fill = tipo
   ) +
   annotate("text", x = Inf, y = -Inf, label = "Fuente: Cyclistic", hjust = 1.1, vjust = -0.5, size = 3)
 ```
+
+![](images/Tiempo_promedio_recorrido_diario_tipo_cliente.png)
